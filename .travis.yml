@@ -1,0 +1,25 @@
+sudo: false
+language: go
+go:
+- 1.5
+env:
+- GIMME_OS=linux GIMME_ARCH=amd64
+- GIMME_OS=darwin GIMME_ARCH=amd64
+- GIMME_OS=windows GIMME_ARCH=amd64
+install:
+- go get -d -v ./...
+script:
+- go build -v -o terraform-provisioner-makefile
+- tar czvf terraform-provisioner-makefile_${TRAVIS_TAG}_${GIMME_OS}_${GIMME_ARCH}.tar.gz
+  terraform-provisioner-makefile
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: oLaPgyuqZ92pRNK5zws4RQesEgsGHGBIGXiHN7WU8dvyGDdfueOFVQAHeGV3bePAh90m0y2qJSPk3DM6RNFGZR3rqr1TPm8Cj+UuDpnlV5UeFZ56+M+u+oe+krk5RK28re71xtBnFWiQgdYvQUpBiF29qW1STZG6cOeTwPVIkzXf69M0hztUfwVJchp+AER/TX4E0iAkPe+blsQit/1uay1RLzgRgZ+uYU5IKAU1MO8UGdq08ZKf/Cyvk9+l2iHP/VN6NxGXtL7xUDLCj8G26RlMN+2mk9aJoFOsMv/NOUWRG1drQ9gG76Y/4r5N8LAYcR0anPRJtA2kEYb1wRFhbNdaKjASsde0rPgpFl4ZaKdCAsKk4F8MTwi2e3esFo3pHShkf/ZJ1VA3ExQN4/jqA6cuU+2YedeWjLqGIWHeb2qD8juw2GH/e29Toh8y/AJJ3lEW/Amz5Qx1jgGgq6dunA4RMLzIQH4NYJsHUc0Moech0Zy3/LKzzT0DX1RTXKHYM3gN91iF80j9P3fvTs6ClUnNwENI5pjYn7L2zJj6a3s+4O3aoH2FEP3wPMKUHy7ewA96nC89d60Q1lTq6RY7UYUFjgHtVUpa0vfv+9a2pxLFASoNbus1xH3E600MpoXY81RZWp8+EfkVKs3o9NBMBMTY69o8jk8IuQieqwot/RA=
+  file: terraform-provisioner-makefile_*
+  file_glob: true
+  on:
+    repo: jtopjian/terraform-provisioner-makefile
+    all_branches: true
+    tags: true
